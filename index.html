@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Personal Portfolio of Ayomide Bankole - Web Developer">
+    <title>Ayomide Bankole | Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS Variables for Easy Maintenance --- */
+        :root {
+            --primary-color: #2575fc;
+            --secondary-color: #6a11cb;
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --card-bg: #ffffff;
+            --nav-bg: #ffffff;
+            --shadow: rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        /* Dark Mode Variables */
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1f1f1f;
+            --nav-bg: #1f1f1f;
+            --shadow: rgba(0,0,0,0.5);
+        }
+
+        /* --- Reset & Base --- */
+        * {margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif;}
+        html {scroll-behavior: smooth;}
+        body {line-height: 1.6; background-color: var(--bg-color); color: var(--text-color); transition: background 0.3s, color 0.3s;}
+        
+        .container {width: 90%; max-width: 1100px; margin: 0 auto;}
+        
+        /* --- Navbar --- */
+        nav {background-color: var(--nav-bg); padding: 1rem 0; box-shadow: 0 2px 5px var(--shadow); position: sticky; top: 0; z-index: 1000; transition: background 0.3s;}
+        .nav-container {display: flex; justify-content: space-between; align-items: center;}
+        .logo {font-weight: 700; font-size: 1.5rem; color: var(--primary-color);}
+        
+        ul.nav-links {list-style: none; display: flex; gap: 2rem; align-items: center;}
+        ul.nav-links li a {text-decoration: none; color: var(--text-color); font-weight: 500; transition: color 0.3s;}
+        ul.nav-links li a:hover {color: var(--primary-color);}
+
+        .nav-actions {display: flex; gap: 1rem; align-items: center;}
+        
+        /* Dark Mode Toggle */
+        #theme-toggle {background: none; border: none; cursor: pointer; font-size: 1.2rem; color: var(--text-color);}
+
+        /* Hamburger Menu (Hidden on Desktop) */
+        .hamburger {display: none; cursor: pointer; flex-direction: column; gap: 5px;}
+        .bar {width: 25px; height: 3px; background-color: var(--text-color); transition: var(--transition);}
+
+        /* --- Hero Section --- */
+        .hero {height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; background: linear-gradient(to right, var(--secondary-color), var(--primary-color)); color: #fff; padding: 0 1rem;}
+        .hero h1 {font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1rem;}
+        .hero p {font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9;}
+        .hero .btn {padding: 0.8rem 2rem; background-color: #fff; color: var(--primary-color); border: none; border-radius: 5px; text-decoration: none; font-weight: 700; transition: var(--transition);}
+        .hero .btn:hover {transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2);}
+
+        /* --- General Sections --- */
+        section {padding: 5rem 0;}
+        section h2 {text-align: center; margin-bottom: 3rem; font-size: 2rem; color: var(--primary-color);}
+
+        /* --- About --- */
+        .about p {text-align: center; max-width: 700px; margin: 0 auto; font-size: 1.1rem;}
+
+        /* --- Projects --- */
+        .project-filters {text-align: center; margin-bottom: 2rem;}
+        .filter-btn {padding: 0.5rem 1.2rem; margin: 0.3rem; border: 1px solid var(--primary-color); background: transparent; color: var(--primary-color); font-weight: 500; border-radius: 20px; cursor: pointer; transition: var(--transition);}
+        .filter-btn.active, .filter-btn:hover {background-color: var(--primary-color); color: #fff;}
+
+        .projects .project-grid {display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;}
+        
+        .project-card {background-color: var(--card-bg); border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px var(--shadow); transition: transform 0.3s;}
+        .project-card:hover {transform: translateY(-10px);}
+        
+        .project-img-wrapper {width: 100%; height: 180px; background-color: #ddd; overflow: hidden;}
+        .project-img-wrapper img {width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;}
+        .project-card:hover .project-img-wrapper img {transform: scale(1.1);}
+        
+        .project-info {padding: 1.5rem;}
+        .project-info h3 {margin-bottom: 0.5rem; color: var(--text-color);}
+        .project-info p {font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-color); opacity: 0.8;}
+        .project-link {text-decoration: none; color: var(--primary-color); font-weight: 500;}
+
+        /* --- Skills --- */
+        .skills-grid {display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;}
+        .skill {background-color: var(--card-bg); border: 1px solid #ddd; padding: 0.8rem 1.5rem; border-radius: 5px; font-weight: 500; transition: var(--transition); box-shadow: 0 2px 5px var(--shadow);}
+        body.dark-mode .skill {border-color: #333;}
+        .skill:hover {border-color: var(--primary-color); color: var(--primary-color); transform: translateY(-3px);}
+
+        /* --- Contact --- */
+        .contact form {max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem;}
+        .form-group {display: flex; flex-direction: column;}
+        /* Screen reader only label */
+        .sr-only {position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); border: 0;}
+        
+        .contact input, .contact textarea {padding: 1rem; border: 1px solid #ddd; border-radius: 5px; background-color: var(--card-bg); color: var(--text-color); outline: none; transition: border 0.3s;}
+        .contact input:focus, .contact textarea:focus {border-color: var(--primary-color);}
+        
+        .contact button {padding: 1rem; border: none; background-color: var(--primary-color); color: #fff; font-weight: 700; border-radius: 5px; cursor: pointer; transition: background 0.3s;}
+        .contact button:hover {background-color: var(--secondary-color);}
+        .form-message {text-align: center; margin-top: 1rem; font-weight: 500;}
+
+        /* --- Footer --- */
+        footer {background-color: #111; color: #fff; text-align: center; padding: 2rem 0; margin-top: auto;}
+
+        /* --- Animations --- */
+        .reveal {opacity: 0; transform: translateY(30px); transition: all 0.8s ease;}
+        .reveal.active {opacity: 1; transform: translateY(0);}
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 768px) {
+            .hamburger {display: flex; z-index: 1001;}
+            
+            ul.nav-links {
+                position: fixed;
+                top: 0; right: -100%;
+                width: 70%;
+                height: 100vh;
+                background-color: var(--nav-bg);
+                flex-direction: column;
+                justify-content: center;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+                transition: right 0.3s ease-in-out;
+            }
+            
+            ul.nav-links.nav-active {right: 0;}
+            
+            /* Burger Animation */
+            .hamburger.toggle .bar:nth-child(1) {transform: rotate(-45deg) translate(-5px, 6px);}
+            .hamburger.toggle .bar:nth-child(2) {opacity: 0;}
+            .hamburger.toggle .bar:nth-child(3) {transform: rotate(45deg) translate(-5px, -6px);}
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">Ayomide Bankole</div>
+            <div class="nav-actions">
+                <button id="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
+                <div class="hamburger">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Hi, I'm Ayomide Bankole</h1>
+            <p>Junior Web Developer | Passionate About Creating Clean & Responsive Websites</p>
+            <a href="#contact" class="btn">Hire Me</a>
+        </div>
+    </section>
+
+    <section id="about" class="about reveal">
+        <div class="container">
+            <h2>About Me</h2>
+            <p>I am a passionate web developer specializing in building modern, responsive, and user-friendly websites. I love turning ideas into reality using HTML, CSS, and JavaScript.</p>
+        </div>
+    </section>
+
+    <section id="projects" class="projects reveal">
+        <div class="container">
+            <h2>My Projects</h2>
+            <div class="project-filters">
+                <button class="filter-btn active" data-category="all">All</button>
+                <button class="filter-btn" data-category="web">Web</button>
+                <button class="filter-btn" data-category="javascript">JavaScript</button>
+                <button class="filter-btn" data-category="css">CSS</button>
+            </div>
+            
+            <div class="project-grid">
+                <article class="project-card" data-category="web">
+                    <div class="project-img-wrapper">
+                        <img src="Screenshot_20251210-171514.jpg" alt="Portfolio Website Preview">
+                    </div>
+                    <div class="project-info">
+                        <h3>Portfolio Website</h3>
+                        <p>A clean, responsive personal portfolio website using HTML, CSS, and JavaScript.</p>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="project-link">View Project &rarr;</a>
+                    </div>
+                </article>
+
+                <article class="project-card" data-category="web">
+                    <div class="project-img-wrapper">
+                        <img src="Screenshot_20251210-171514.jpg" alt="Landing Page Preview">
+                    </div>
+                    <div class="project-info">
+                        <h3>Landing Page</h3>
+                        <p>Modern landing page design with responsive layout and smooth animations.</p>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="project-link">View Project &rarr;</a>
+                    </div>
+                </article>
+
+                <article class="project-card" data-category="javascript">
+                    <div class="project-img-wrapper">
+                        <img src="Screenshot_20251210-171514.jpg" alt="Todo App Preview">
+                    </div>
+                    <div class="project-info">
+                        <h3>Todo App</h3>
+                        <p>Interactive JavaScript Todo app to track tasks with CRUD functionality.</p>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="project-link">View Project &rarr;</a>
+                    </div>
+                </article>
+
+                <article class="project-card" data-category="css">
+                    <div class="project-img-wrapper">
+                        <img src="Screenshot_20251210-171514.jpg" alt="CSS Animation Preview">
+                    </div>
+                    <div class="project-info">
+                        <h3>CSS Animation</h3>
+                        <p>Creative animation using only HTML and CSS for interactive effects.</p>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="project-link">View Project &rarr;</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="skills reveal">
+        <div class="container">
+            <h2>My Skills</h2>
+            <div class="skills-grid">
+                <div class="skill">HTML5</div>
+                <div class="skill">CSS3</div>
+                <div class="skill">JavaScript</div>
+                <div class="skill">Responsive Design</div>
+                <div class="skill">Debugging</div>
+                <div class="skill">Git & GitHub</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact reveal">
+        <div class="container">
+            <h2>Contact Me</h2>
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="name" class="sr-only">Your Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="sr-only">Your Email</label>
+                    <input type="email" id="email" name="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message" class="sr-only">Your Message</label>
+                    <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
+                </div>
+                <button type="submit">Send Message</button>
+            </form>
+            <p class="form-message"></p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Ayomide Bankole. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. Contact Form Submission ---
+        document.getElementById('contact-form').addEventListener('submit', function(e){
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const formMessage = document.querySelector('.form-message');
+            
+            // Simple validation check
+            if(name.length < 2) {
+                formMessage.style.color = 'red';
+                formMessage.textContent = 'Please enter a valid name.';
+                return;
+            }
+
+            formMessage.style.color = 'green';
+            formMessage.textContent = `Thank you, ${name}! Your message has been sent.`;
+            e.target.reset();
+            
+            // Clear message after 5 seconds
+            setTimeout(() => { formMessage.textContent = ''; }, 5000);
+        });
+
+        // --- 2. Mobile Menu Toggle ---
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        const links = document.querySelectorAll('.nav-links li');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('nav-active');
+            hamburger.classList.toggle('toggle');
+        });
+
+        // Close mobile menu when a link is clicked
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('nav-active');
+                hamburger.classList.remove('toggle');
+            });
+        });
+
+        // --- 3. Dark/Light Mode with Local Storage ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        // Check local storage on load
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.textContent = '☀️';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const isDark = body.classList.contains('dark-mode');
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+            // Save preference
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
+        // --- 4. Project Filtering ---
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const category = btn.dataset.category;
+
+                projectCards.forEach(card => {
+                    // Animation reset
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.8)';
+                    
+                    setTimeout(() => {
+                        if (category === 'all' || card.dataset.category === category) {
+                            card.style.display = 'block';
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'scale(1)';
+                            }, 50);
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }, 300); // Wait for fade out
+                });
+            });
+        });
+
+        // --- 5. Scroll Reveal Animation ---
+        const reveals = document.querySelectorAll('.reveal');
+        
+        const revealOnScroll = () => {
+            const triggerBottom = window.innerHeight / 1.15;
+            reveals.forEach(reveal => {
+                const revealTop = reveal.getBoundingClientRect().top;
+                if(revealTop < triggerBottom){ 
+                    reveal.classList.add('active'); 
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        // Trigger once on load in case elements are already visible
+        revealOnScroll();
+
+    </script>
+</body>
+</html>
